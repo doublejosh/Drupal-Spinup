@@ -1,3 +1,5 @@
+#!/bin/bash
+
 
 # Configurations...
 
@@ -5,14 +7,15 @@
 INSTALL_BASE="$HOME/Sites"
 
 # Modules to enable
-CONTRIB_MODULES="  admin_menu"
-CONTRIB_MODULES+=" advagg" # API modules
+CONTRIB_MODULES=" admin_menu"
+CONTRIB_MODULES+=" gplib coder_upgrade gpui libraries" # Code Review
+
+# Be explicit about Drush and make it loud.
+DRUSH="/Applications/MAMP/bin/php/php5.3.6/bin/php /usr/local/bin/drush/drush.php -v"
 
 # ...end configurations.
 
 
-# Make it loud.
-DRUSH="drush -v"
 
 # Grab the date for each unique spin up.
 DATE=`date "+%Y_%m_%d_%H_%M"`
@@ -34,15 +37,18 @@ NEW_DIRS="sites/default/files sites/all/modules/contrib sites/all/modules/custom
 DB_URL="mysql://root:root@localhost:3306/$NAMESPACE"
 mkdir -v $NEW_DIRS
 cp -v sites/default/default.settings.php sites/default/settings.php
-cd $INSTALL_BASE/$NAMESPACE
-$DRUSH site-install standard -y --db-url="$DB_URL"
+
+echo "ATTEMPTING: $DRUSH site-install standard -y --db-url='$DB_URL'"
+
+$DRUSH site-install standard -y --db-url=$DB_URL
+$DRUSH status
 
 # Update permissions.
 chmod 777 "sites/default/files"
 
 # Download/install contrib modules
 $DRUSH -y dl $CONTRIB_MODULES
-$DRUSH -y en $CONTRIB_MODULES
+#$DRUSH -y en $CONTRIB_MODULES
 
 echo "
 
