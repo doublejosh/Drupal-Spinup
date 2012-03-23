@@ -10,11 +10,21 @@ INSTALL_BASE="$HOME/Sites"
 CONTRIB_MODULES=" admin_menu" # Admin Tools
 CONTRIB_MODULES+=" gplib coder_upgrade gpui libraries" # Code Review
 
-# Be explicit about Drush and make it loud.
-DRUSH="/Applications/MAMP/bin/php/php5.3.6/bin/php /usr/local/bin/drush/drush.php -v"
+DRUSH_LOCATION="/usr/local/bin/drush/drush.php"
+PHP_LOCATION="/Applications/MAMP/bin/php5.3.6/bin/php"
+MYSQL_URL="mysql://root:root@127.0.0.1:3306"
 
 # ...end configurations.
 
+# Be explicit about Drush and make it loud.
+DRUSH="$PHP_LOCATION $DRUSH_LOCATION -v"
+
+if [ REMOTE_USERNAME == 0 ]; then
+  # Read in necessary username and password.
+  read -p "Enter Username: " remote_user
+else
+  remote_user=$REMOTE_USERNAME
+fi
 
 
 # Grab the date for each unique spin up.
@@ -34,7 +44,7 @@ echo "
 Setting Up Drupal...
 "
 NEW_DIRS="sites/default/files sites/all/modules/contrib sites/all/modules/custom sites/all/modules/admin"
-DB_URL="mysql://root:root@localhost:3306/$NAMESPACE"
+DB_URL="$MYSQL_URL/$NAMESPACE"
 mkdir -v $NEW_DIRS
 cp -v sites/default/default.settings.php sites/default/settings.php
 
