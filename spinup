@@ -1,0 +1,49 @@
+
+# Configurations...
+
+# Install base
+INSTALL_BASE="$HOME/Sites"
+
+# Modules to enable
+CONTRIB_MODULES="  admin_menu"
+CONTRIB_MODULES+=" advagg" # API modules
+
+# ...end configurations.
+
+
+# Make it loud.
+DRUSH="drush -v"
+
+# Grab the date for each unique spin up.
+DATE=`date "+%Y_%m_%d_%H_%M"`
+NAMESPACE="drupal_$DATE"
+
+# Put Drupal in a unique folder.
+cd $INSTALL_BASE
+echo "
+Getting Drupal...
+"
+$DRUSH dl drupal --drupal-project-rename="$NAMESPACE"
+cd $INSTALL_BASE/$NAMESPACE
+
+# Get the site running.
+echo "
+Setting Up Drupal...
+"
+NEW_DIRS="sites/default/files sites/all/modules/contrib sites/all/modules/custom sites/all/modules/admin"
+DB_URL="mysql://root:root@localhost:3306/$NAMESPACE"
+mkdir -v $NEW_DIRS
+cp -v sites/default/default.settings.php sites/default/settings.php
+cd $INSTALL_BASE/$NAMESPACE
+$DRUSH site-install standard -y --db-url="$DB_URL"
+
+# Update permissions.
+chmod 777 "sites/default/files"
+
+# Download/install contrib modules
+$DRUSH -y dl $CONTRIB_MODULES
+$DRUSH -y en $CONTRIB_MODULES
+
+echo "
+
+Your site is ready with the namespace: $NAMESPACE"
