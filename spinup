@@ -7,7 +7,7 @@
 INSTALL_BASE="$HOME/Sites"
 
 # Modules to enable
-CONTRIB_MODULES=" admin_menu"
+CONTRIB_MODULES=" admin_menu" # Admin Tools
 CONTRIB_MODULES+=" gplib coder_upgrade gpui libraries" # Code Review
 
 # Be explicit about Drush and make it loud.
