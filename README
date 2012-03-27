@@ -1,0 +1,17 @@
+
+Spin Up a Drupal Instance.
+This script makes it super easy to fire up a working Drupal site with one command.
+
+Options:
+
+    -d      Drupal version to use.
+            Examples:
+            "-d 8"
+            "-d 7.11"
+            
+    -m      Contrib modules to download and enable.
+            Examples:
+            "-m views"
+            "-m views better_exposed_filters"
+            
+    -v      Verbose mode (for drush).
