@@ -7,8 +7,10 @@
 INSTALL_BASE="$HOME/Sites"
 
 # Modules to enable
-CONTRIB_MODULES="admin_menu" # Admin Tools
+# Suggestions listed are a bit much :)
+CONTRIB_MODULES="admin_menu devel module_builder dba drupalforfirebug" # Admin/Dev Tools
 CONTRIB_MODULES+=" coder cgrammar_parser_lib grammar_parser secure_code_review libraries" # Code Review
+CONTRIB_MODULES+=" features backup_migrate" # Environment Tools
 
 DRUSH_LOCATION="/usr/local/bin/drush/drush.php"
 PHP_LOCATION="/Applications/MAMP/bin/php5.3.6/bin/php"
