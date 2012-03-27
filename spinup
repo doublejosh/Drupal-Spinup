@@ -7,14 +7,53 @@
 INSTALL_BASE="$HOME/Sites"
 
 # Modules to enable
-CONTRIB_MODULES=" admin_menu" # Admin Tools
-CONTRIB_MODULES+=" gplib coder_upgrade gpui libraries" # Code Review
+CONTRIB_MODULES="admin_menu" # Admin Tools
+CONTRIB_MODULES+=" coder cgrammar_parser_lib grammar_parser secure_code_review libraries" # Code Review
 
 # Be explicit about Drush and make it loud.
 DRUSH="/Applications/MAMP/bin/php/php5.3.6/bin/php /usr/local/bin/drush/drush.php -v"
 
 # ...end configurations.
 
+
+# GetOpts How To
+# http://rsalveti.wordpress.com/2007/04/03/bash-parsing-arguments-with-getopts/
+
+# Collect options...
+DRUPAL=
+CONTRIB=
+VERBOSE=
+while getopts "d:m:v" OPTION
+do
+     case $OPTION in
+         d)
+             DRUPAL=$OPTARG
+             ;;
+         m)
+             CONTRIB=$OPTARG
+             ;;
+         v)
+             VERBOSE=1
+             ;;
+     esac
+done
+
+# Set specific Drupal version via args.
+if [[ $DRUPAL ]]; then
+    if [ ${#DRUPAL} == 1 ]; then
+        DRUPAL="drupal-$DRUPAL.x"
+    else
+        DRUPAL="drupal-$DRUPAL"
+    fi
+else
+    DRUPAL='drupal'
+fi
+
+# Add in extra modules via args.
+if [[ $CONTRIB ]]
+then
+    CONTRIB_MODULES+=" $CONTRIB"
+fi
 
 
 # Grab the date for each unique spin up.
@@ -26,7 +65,7 @@ cd $INSTALL_BASE
 echo "
 Getting Drupal...
 "
-$DRUSH dl drupal --drupal-project-rename="$NAMESPACE"
+$DRUSH dl $DRUPAL --drupal-project-rename="$NAMESPACE"
 cd $INSTALL_BASE/$NAMESPACE
 
 # Get the site running.
@@ -38,18 +77,21 @@ DB_URL="mysql://root:root@localhost:3306/$NAMESPACE"
 mkdir -v $NEW_DIRS
 cp -v sites/default/default.settings.php sites/default/settings.php
 
-echo "ATTEMPTING: $DRUSH site-install standard -y --db-url='$DB_URL'"
-
 $DRUSH site-install standard -y --db-url=$DB_URL
-$DRUSH status
 
 # Update permissions.
 chmod 777 "sites/default/files"
+
+echo "
+Setting Up Contrib Modules...
+"
 
 # Download/install contrib modules
 $DRUSH -y dl $CONTRIB_MODULES
 #$DRUSH -y en $CONTRIB_MODULES
 
 echo "
-
-Your site is ready with the namespace: $NAMESPACE"
+* * * * * * * * * * * * * * * * * * * * * * * * * * * *
+Your site is ready with this namespace: * $NAMESPACE
+* * * * * * * * * * * * * * * * * * * * * * * * * * * *
+"
