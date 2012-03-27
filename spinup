@@ -101,7 +101,7 @@ $DRUSH -y dl $CONTRIB_MODULES
 #$DRUSH -y en $CONTRIB_MODULES
 
 echo "
-* * * * * * * * * * * * * * * * * * * * * * * * * * * *
-Your site is ready with this namespace: * $NAMESPACE
-* * * * * * * * * * * * * * * * * * * * * * * * * * * *
+* * * * * * * * * * * * * * * * * * * * * *
+* Your site is ready with this namespace: * $NAMESPACE
+* * * * * * * * * * * * * * * * * * * * * *
 "
