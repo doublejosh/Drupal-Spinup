@@ -1,32 +1,24 @@
 #!/bin/bash
 
-
 # Configurations...
 
-# Install base
-INSTALL_BASE="$HOME/Sites"
-
-# Modules to enable
+# Modules to enable.
 # Suggestions listed are a bit much :)
-CONTRIB_MODULES="admin_menu devel module_builder dba drupalforfirebug" # Admin/Dev Tools
-CONTRIB_MODULES+=" coder cgrammar_parser_lib grammar_parser secure_code_review libraries" # Code Review
+CONTRIB_MODULES="admin_menu devel module_builder dba drupalforfirebug simpletest" # Admin/Dev Tools
+CONTRIB_MODULES+=" coder grammar_parser_lib grammar_parser secure_code_review libraries" # Code Review
 CONTRIB_MODULES+=" features backup_migrate" # Environment Tools
 
+# Evironment details.
+INSTALL_BASE="$HOME/Sites"
 DRUSH_LOCATION="/usr/local/bin/drush/drush.php"
-PHP_LOCATION="/Applications/MAMP/bin/php5.3.6/bin/php"
+PHP_LOCATION="/Applications/MAMP/bin/php/php5.3.6/bin/php"
 MYSQL_URL="mysql://root:root@127.0.0.1:3306"
 
 # ...end configurations.
 
-# Be explicit about Drush and make it loud.
-DRUSH="$PHP_LOCATION $DRUSH_LOCATION -v"
 
-if [ REMOTE_USERNAME == 0 ]; then
-  # Read in necessary username and password.
-  read -p "Enter Username: " remote_user
-else
-  remote_user=$REMOTE_USERNAME
-fi
+# Be explicit about Drush.
+DRUSH="$PHP_LOCATION $DRUSH_LOCATION"
 
 # GetOpts How To
 # http://rsalveti.wordpress.com/2007/04/03/bash-parsing-arguments-with-getopts/
@@ -67,6 +59,10 @@ then
     CONTRIB_MODULES+=" $CONTRIB"
 fi
 
+# Make Drush loud.
+if [[ $VERBOSE ]]; then
+    DRUSH+="$DRUSH -v"
+fi
 
 # Grab the date for each unique spin up.
 DATE=`date "+%Y_%m_%d_%H_%M"`
